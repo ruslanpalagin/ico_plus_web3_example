@@ -1,4 +1,5 @@
 const BAToken = artifacts.require("../contracts/BAToken.sol");
+const Ico = artifacts.require("../contracts/Ico.sol");
 
 contract('Fight', function (accounts) {
     
@@ -19,12 +20,14 @@ contract('Fight', function (accounts) {
             10,
             {from: appOwner}
         );
-    
-        instanceOfBAToken = await web3.eth.contract(BAToken.abi).at(await instanceOfIco.token().address);
+    	console.log("00000123");
+
+        instanceOfBAToken = await BAToken.at(await instanceOfIco.token());
+	console.log(instanceOfBAToken);
     });
 
     it("tests process", async () => {
-        await web3.eth.sendTransaction({to: instanceOfIco.address, from: user, value: web3.toWei("1", "ether")})
-        assert.equal(await instanceOfBAToken.balanceOf(user).toNumber(), 10, "update");
+	await instanceOfIco.getTokens({value: 1000000000000000000, from: user})
+        assert.equal(await instanceOfBAToken.balanceOf(user), 10, "update");
     });
 });
