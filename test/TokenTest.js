@@ -5,24 +5,26 @@ contract('Fight', function (accounts) {
     var appOwner = accounts[0];
     var user = accounts[1];
 
-    let tokenAddress;
+    var tokenAddress;
+    var instanceOfBAToken;
+    var instanceOfIco;
 
     let comment = "London is the capital of GB";
     let amount = 100;
 
     beforeEach("init", async () => {
-        instanceOfBAToken = await BAToken.new(
-            comment,
-            comment,
-            1000,
+        instanceOfIco = await Ico.new(
+            "BAToken",
+            "GT",
+            10,
             {from: appOwner}
         );
     
-        tokenAddress = instanceOfBAToken.address;
+        instanceOfBAToken = await web3.eth.contract(BAToken.abi).at(await instanceOfIco.token().address);
     });
 
     it("tests process", async () => {
-        web3.eth.sendTransaction({to:tokenAddress, from:user, value:web3.toWei("1", "ether")}, {from: user})
-        // assert.equal(await instanceOfBAToken.balanceOf(user).toNumber(), 1000, "update");
+        await web3.eth.sendTransaction({to: instanceOfIco.address, from: user, value: web3.toWei("1", "ether")})
+        assert.equal(await instanceOfBAToken.balanceOf(user).toNumber(), 10, "update");
     });
 });
