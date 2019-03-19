@@ -38,15 +38,15 @@ contract Ico {
     }
 
     function getTokens() public payable {
-        //release(msg.sender, msg.value); 
+        release(msg.sender, msg.value); 
     }
 
     function release(address user, uint256 value) private {
-	require(now <= endDate);
+	    require(now <= endDate);
         uint256 _amount = value.mul(initialConversion);
         token.mint(user, _amount);
 
-        //owner.transfer(address(this).balance);
+        owner.transfer(address(this).balance);
         emit Transfer(address(this), user, _amount);
     }
 }

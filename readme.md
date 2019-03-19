@@ -22,7 +22,7 @@ yarn add openzeppelin-solidity
 * run ganache * for Ruslan: /home/dev/ProgramFiles/ganache-1.2.1-x86_64.AppImage
 npx create-react-app web
 yarn start
-truffle compile && truffle migrate --network development --reset
+truffle compile && truffle migrate --reset
 
 
 
