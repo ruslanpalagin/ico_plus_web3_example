@@ -22,8 +22,9 @@ yarn add openzeppelin-solidity
 * run ganache * for Ruslan: /home/dev/ProgramFiles/ganache-1.2.1-x86_64.AppImage
 npx create-react-app web
 yarn start
-truffle compile && truffle migrate --reset
-
+truffle compile && truffle migrate --reset && rm -rf web/src/contracts && cp -a build/contracts web/src/contracts
+ganache - increase gas limit
+metaMask - reset account
 
 
                   l                         l

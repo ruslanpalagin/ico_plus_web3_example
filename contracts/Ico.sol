@@ -12,6 +12,7 @@ contract Ico {
     uint8 public initialConversion;
     address payable public owner;
     BAToken public token;
+    mapping(address => uint) public wishList;
 
     event Transfer(
         address from,
@@ -37,16 +38,24 @@ contract Ico {
         );
     }
 
-    function getTokens() public payable {
-        release(msg.sender, msg.value); 
+    function addMeToWishList(uint amount) public {
+        wishList[msg.sender] = amount;
     }
 
-    function release(address user, uint256 value) private {
-	    require(now <= endDate);
-        uint256 _amount = value.mul(initialConversion);
-        token.mint(user, _amount);
-
-        owner.transfer(address(this).balance);
-        emit Transfer(address(this), user, _amount);
+    function getMyWishListAmount() public view returns(uint) {
+        return wishList[msg.sender];
     }
+
+    // function getTokens() public payable {
+    //     release(msg.sender, msg.value); 
+    // }
+
+    // function release(address user, uint256 value) private {
+	//     require(now <= endDate);
+    //     uint256 _amount = value.mul(initialConversion);
+    //     token.mint(user, _amount);
+
+    //     owner.transfer(address(this).balance);
+    //     emit Transfer(address(this), user, _amount);
+    // }
 }
