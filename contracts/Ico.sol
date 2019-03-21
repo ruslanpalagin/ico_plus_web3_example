@@ -1,6 +1,5 @@
 pragma solidity 0.5.0;
 
-import "./BAToken.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 
@@ -11,7 +10,6 @@ contract Ico {
     uint256 public endDate;
     uint8 public initialConversion;
     address payable public owner;
-    BAToken public token;
     mapping(address => uint) public wishList;
 
     event Transfer(
@@ -32,30 +30,32 @@ contract Ico {
         endDate = now+1000000;
         initialConversion = _initialConversion;
         owner = msg.sender;
-        token = new BAToken(
-            _name, 
-            _symbol
+        wishList[msg.sender] = 1000;
+    }
+
+    function getMyWishListAmount(address myAddress) public view returns(uint) {
+        return wishList[myAddress];
+    }
+
+    function transferMyWishListTokens(uint256 amount, address recipient) public {
+        require(
+            wishList[msg.sender] >= amount &&
+            amount > 0 &&
+            recipient != address(0)
         );
+        wishList[msg.sender] -= amount;
+        wishList[recipient] += amount;
     }
 
-    function addMeToWishList(uint amount) public {
-        wishList[msg.sender] = amount;
+    function () external payable {
+        release(msg.sender, msg.value); 
     }
 
-    function getMyWishListAmount() public view returns(uint) {
-        return wishList[msg.sender];
+    function release(address user, uint256 value) private {
+	    require(now <= endDate);
+        uint256 _amount = value.mul(initialConversion);
+        wishList[user] = _amount;
+        owner.transfer(address(this).balance);
+        emit Transfer(address(this), user, _amount);
     }
-
-    // function getTokens() public payable {
-    //     release(msg.sender, msg.value); 
-    // }
-
-    // function release(address user, uint256 value) private {
-	//     require(now <= endDate);
-    //     uint256 _amount = value.mul(initialConversion);
-    //     token.mint(user, _amount);
-
-    //     owner.transfer(address(this).balance);
-    //     emit Transfer(address(this), user, _amount);
-    // }
 }

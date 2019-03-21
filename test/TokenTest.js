@@ -1,3 +1,4 @@
+
 const BAToken = artifacts.require("../contracts/BAToken.sol");
 const Ico = artifacts.require("../contracts/Ico.sol");
 
@@ -22,12 +23,12 @@ contract('Fight', function (accounts) {
         );
     	console.log("00000123");
 
-        instanceOfBAToken = await BAToken.at(await instanceOfIco.token());
-	console.log(instanceOfBAToken);
     });
 
     it("tests process", async () => {
-	await instanceOfIco.getTokens({value: 1000000000000000000, from: user})
-        assert.equal(await instanceOfBAToken.balanceOf(user), 10, "update");
+
+	await instanceOfIco.sendTransaction({from: user, value: 1000000000000000000});
+    assert.equal( (await instanceOfIco.getMyWishListAmount(user))
+    , 10000000000000000000, "update");
     });
 });
