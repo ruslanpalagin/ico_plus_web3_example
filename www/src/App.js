@@ -78,15 +78,14 @@ class App extends Component {
     };
 
     refreshUserBalance = () => {
-        this.ico.getMyWishListAmount(this.state.userAddress, (error, amountInWei) => {
+        this.ico.getBalance(this.state.userAddress, (error, amountInWei) => {
             console.log("wl", error,amountInWei);
             this.setState({myWishedAmount: parseInt(amountInWei, 10)});
         });
     };
 
-    onSubmit = (data) => {
-        console.log(data.amount);
-        this.ico.addMeToWishList(data.amount);
+    send777 = () => {
+        this.ico.transferMyTokens(777, "0x355C264d6d992c8CBf82DED1Da327ac10A613dBD");
     };
 
     render() {
@@ -97,6 +96,7 @@ class App extends Component {
                 <p> End date is :  {endDate} </p>
                 <div>My amount: {myWishedAmount}</div>
                 <div>To get more balance - send ETH to contract (do not forget to increase gas limit)</div>
+                <button onClick={this.send777}>Send 777 to my friend</button>
             </div>
         );
     }

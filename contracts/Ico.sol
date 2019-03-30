@@ -2,7 +2,6 @@ pragma solidity 0.5.0;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-
 contract Ico {
     using SafeMath for uint256;
 
@@ -10,7 +9,7 @@ contract Ico {
     uint256 public endDate;
     uint8 public initialConversion;
     address payable public owner;
-    mapping(address => uint) public wishList;
+    mapping(address => uint) public balances;
 
     event Transfer(
         address from,
@@ -30,21 +29,22 @@ contract Ico {
         endDate = now+1000000;
         initialConversion = _initialConversion;
         owner = msg.sender;
-        wishList[msg.sender] = 1000;
+        balances[msg.sender] = 1000;
     }
 
-    function getMyWishListAmount(address myAddress) public view returns(uint) {
-        return wishList[myAddress];
+    function getBalance(address userAddress) public view returns(uint) {
+        return balances[userAddress];
     }
 
-    function transferMyWishListTokens(uint256 amount, address recipient) public {
+    function transferMyTokens(uint256 amount, address recipient) public {
         require(
-            wishList[msg.sender] >= amount &&
+            balances[msg.sender] >= amount &&
             amount > 0 &&
             recipient != address(0)
         );
-        wishList[msg.sender] -= amount;
-        wishList[recipient] += amount;
+        balances[msg.sender] -= amount;
+        balances[recipient] += amount;
+        emit Transfer(msg.sender, recipient, amount);
     }
 
     function () external payable {
@@ -54,7 +54,7 @@ contract Ico {
     function release(address user, uint256 value) private {
 	    require(now <= endDate);
         uint256 _amount = value.mul(initialConversion);
-        wishList[user] = _amount;
+        balances[user] += _amount;
         owner.transfer(address(this).balance);
         emit Transfer(address(this), user, _amount);
     }
