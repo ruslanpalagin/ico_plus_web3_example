@@ -5,7 +5,7 @@ import ContactFactory from './libs/meta_mask_decorator/ContactFactory';
 import Ico from "./contracts/Ico";
 
 const artifacts = { Ico };
-const mmd = new MetaMaskDecorator({ debug: 1 });
+const mmd = new MetaMaskDecorator({ debug: 0 });
 const contractFactory = new ContactFactory({ mmd, artifacts });
 
 class App extends Component {
@@ -17,7 +17,8 @@ class App extends Component {
             userAddress: null,
             networkName: null,
             myWishedAmount: null,
-            endDate: null
+            endDate: null,
+            lastEvent: null,
         };
     }
 
@@ -49,7 +50,7 @@ class App extends Component {
             icoAddress: ico.address,
         });
 
-        // read
+        // read public property
         ico.endDate.call((error, result) => {
             console.log(error, result);
             var date = new Date(result * 1000);
@@ -58,25 +59,29 @@ class App extends Component {
 
         // subscribe to event
         const eventWatcher = ico.Transfer({
-            fromBlock: 0,
+            fromBlock: 0, // TODO start from (see event handler below) result.blockNumber
             toBlock: 100
         });
-        console.log("eventWatcher", eventWatcher);
-        eventWatcher.on("data", (error, result) => {
+
+        eventWatcher.on("data", (result, error) => {
             console.log("EVENT!!!", error, result);
+            // TODO track result.blockNumber
+            const from = result.args.from;
+            const to = result.args.to;
+            const amount = result.args.amount;
+            this.refreshUserBalance();
+            alert(`ETH has just been sent to contract. ${from} -> ${to}: ${amount}`);
         });
 
-        // read wish list
-        // ico.wishList.call((e,d) => {
-        //   console.log("wl", e,d);
-        // })
-        // read wish list 2
-        ico.getMyWishListAmount((e,d) => {
-            console.log("wl", e,d);
-        })
-        ;
         // save ico contract instane for future usage
         this.ico = ico;
+    };
+
+    refreshUserBalance = () => {
+        this.ico.getMyWishListAmount(this.state.userAddress, (error, amountInWei) => {
+            console.log("wl", error,amountInWei);
+            this.setState({myWishedAmount: parseInt(amountInWei, 10)});
+        });
     };
 
     onSubmit = (data) => {
