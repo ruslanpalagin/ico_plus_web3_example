@@ -25,6 +25,7 @@ yarn start
 truffle compile && truffle migrate --reset && rm -rf www/src/contracts && cp -a build/contracts www/src/contracts
 ganache - increase gas limit
 metaMask - reset account
+tutorial (TODO recreate) https://youtu.be/-5AcE8cNDJk
 
 
                   l                         l
