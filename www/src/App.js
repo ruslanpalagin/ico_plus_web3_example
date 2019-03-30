@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import SendEthForm from "./SendEthForm";
 import MetaMaskDecorator from './libs/meta_mask_decorator/MetaMaskDecorator';
 import ContactFactory from './libs/meta_mask_decorator/ContactFactory';
 import Ico from "./contracts/Ico";
 
 const artifacts = { Ico };
-const mmd = new MetaMaskDecorator({ debug: 0 });
+const mmd = new MetaMaskDecorator({ debug: 1 });
 const contractFactory = new ContactFactory({ mmd, artifacts });
 
 class App extends Component {
@@ -89,13 +88,13 @@ class App extends Component {
         const { networkName, userAddress, icoAddress, endDate, myWishedAmount } = this.state;
         return (
             <div>
-            <h1>ETH (networkName: {networkName}, userAddress: {userAddress}, icoAddress: {icoAddress})</h1>
-        <p> End date is :  {endDate} </p>
+                <h1>ETH (networkName: {networkName}, userAddress: {userAddress}, icoAddress: {icoAddress})</h1>
+                <p> End date is :  {endDate} </p>
 
-        <div>My myWishedAmount: {myWishedAmount}</div>
-        <SendEthForm onSubmit={this.onSubmit}></SendEthForm>
-        </div>
-    );
+                <div>My myWishedAmount: {myWishedAmount}</div>
+                <button onClick={this.onSubmit}>send ETH: </button>
+            </div>
+        );
     }
 }
 

@@ -19,10 +19,10 @@ ______   ___  _____       _                                                     
 
 truffle init
 yarn add openzeppelin-solidity
-* run ganache * for Ruslan: /home/dev/ProgramFiles/ganache-1.2.1-x86_64.AppImage
-npx create-react-app web
+* run ganache *: /home/dev/ProgramFiles/ganache-1.2.1-x86_64.AppImage
+npx create-react-app www
 yarn start
-truffle compile && truffle migrate --reset && rm -rf web/src/contracts && cp -a build/contracts web/src/contracts
+truffle compile && truffle migrate --reset && rm -rf www/src/contracts && cp -a build/contracts www/src/contracts
 ganache - increase gas limit
 metaMask - reset account
 
