@@ -95,9 +95,8 @@ class App extends Component {
             <div>
                 <h1>ETH (networkName: {networkName}, userAddress: {userAddress}, icoAddress: {icoAddress})</h1>
                 <p> End date is :  {endDate} </p>
-
-                <div>My myWishedAmount: {myWishedAmount}</div>
-                <button onClick={this.onSubmit}>send ETH: </button>
+                <div>My amount: {myWishedAmount}</div>
+                <div>To get more balance - send ETH to contract (do not forget to increase gas limit)</div>
             </div>
         );
     }
